@@ -1,7 +1,5 @@
 import random
 import time
-from pathlib import Path
-
 from selenium.webdriver import Keys
 
 from generator.generator import generated_student, generated_date
@@ -42,7 +40,7 @@ class FormPage(BasePage):
         self.select_date_item_from_list(self.locators.DATE_SELECT_DAY_LIST, date.day)
         student_data.date_of_birth = date
 
-        #  select subjects
+        # select subjects
         count_of_subjects = random.randint(0, 14)
         if count_of_subjects > 0:
             random.shuffle(subjects)
@@ -55,7 +53,7 @@ class FormPage(BasePage):
         else:
             student_data.subjects = ['']
 
-        #  select hobbies
+        # select hobbies
         count_of_hobbies = random.randint(0, 3)
         if count_of_hobbies > 0:
             hobbies = self.elements_are_visible(self.locators.HOBBIES_LIST)
@@ -70,7 +68,7 @@ class FormPage(BasePage):
 
         # upload file
         upload_file = self.element_is_visible(self.locators.UPLOAD_FILE)
-        upload_file.send_keys(f"{Path.cwd().parent}/tests/picture.jpg")
+        upload_file.send_keys(r'C:\Users\YURI\PycharmProjects\SimbirSoftTestTask\tests\picture.jpg')
         student_data.upload_file = "picture.jpg"
 
         self.element_is_visible(self.locators.CUR_ADDRESS).send_keys(cur_address)
