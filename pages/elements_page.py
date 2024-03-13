@@ -1,3 +1,4 @@
+import os
 import random
 import time
 
@@ -74,7 +75,7 @@ class FormPage(BasePage):
 
         with allure.step('Upload file'):
             upload_file = self.element_is_visible(self.locators.UPLOAD_FILE)
-            upload_file.send_keys(r'C:\Users\YURI\PycharmProjects\SimbirSoftTestTask\tests\picture.jpg')
+            upload_file.send_keys(os.path.join(os.getcwd(), 'data', 'picture.jpg'))
             student_data.upload_file = "picture.jpg"
 
         with allure.step('Fill current address'):
@@ -103,6 +104,18 @@ class FormPage(BasePage):
 
     @allure.title('Get form result')
     def form_result(self):
+        output_fields = (
+            'full_name',
+            'email',
+            'gender',
+            'mobile',
+            'date_of_birth',
+            'subjects',
+            'hobbies',
+            'upload_file',
+            'cur_address',
+            'state_and_city'
+        )
         result_list = self.elements_are_visible(self.locators.RESULT_TABLE)
-        result_text = [i.text for i in result_list]
+        result_text = {k: v.text for k, v in zip(output_fields, result_list)}
         return result_text

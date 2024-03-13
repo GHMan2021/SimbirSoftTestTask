@@ -21,7 +21,7 @@ class FormPageLocators:
     DATE_SELECT_YEAR = (By.CSS_SELECTOR, "select[class='react-datepicker__year-select']")
     DATE_SELECT_DAY_LIST = (By.CSS_SELECTOR, "div[class^='react-datepicker__day react-datepicker__day']")
 
-    # checkbox fields  input[id^='hobbies-checkbox']
+    # checkbox fields
     HOBBIES_LIST = (By.CSS_SELECTOR, "label[for^='hobbies-checkbox']")
 
     # dropdown fields
