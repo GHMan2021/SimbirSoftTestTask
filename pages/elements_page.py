@@ -1,6 +1,5 @@
 import os
 from selenium.webdriver import Keys
-from generators.generator import StudentGenerator
 from locators.element_page_locators import FormPageLocators
 from pages.base_page import BasePage
 
