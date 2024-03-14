@@ -1,11 +1,9 @@
 import os
-import random
-import time
 
 import allure
 from selenium.webdriver import Keys
 
-from generator.generator import generated_student, generated_date
+from generators.generator import StudentGenerator
 from locators.element_page_locators import FormPageLocators
 from pages.base_page import BasePage
 
@@ -13,94 +11,65 @@ from pages.base_page import BasePage
 class FormPage(BasePage):
     locators = FormPageLocators()
 
-    @allure.title('Fill form fields')
+    student_data = StudentGenerator.random()
+    first_name = student_data['first_name']
+    last_name = student_data['last_name']
+    email = student_data['email']
+    gender = student_data['gender']
+    mobile = student_data['mobile']
+    date = student_data['date_of_birth']
+    subjects = student_data['subjects']
+    hobbies = student_data['hobbies']
+    upload_file = student_data['upload_file']
+    cur_address = student_data['cur_address']
+    state = student_data['state']
+    city = student_data['city']
+
     def fill_fields_and_submit(self):
-        student_data = next(generated_student())
-
-        first_name = student_data.first_name
-        last_name = student_data.last_name
-        email = student_data.email
-        mobile = student_data.mobile
-        subjects = student_data.subjects
-        cur_address = student_data.cur_address
-        state_and_city = student_data.state_and_city
-
         self.remove_footer()
-        with allure.step('Fill full name and email'):
-            self.element_is_visible(self.locators.FIRST_NAME).send_keys(first_name)
-            self.element_is_visible(self.locators.LAST_NAME).send_keys(last_name)
-            self.element_is_visible(self.locators.EMAIL).send_keys(email)
 
-        with allure.step('Select gender'):
-            gender = self.element_is_visible(self.locators.GENDER_RADIOBUTTON)
-            gender.click()
-            student_data.gender = gender.text
+        self.element_is_visible(self.locators.FIRST_NAME).send_keys(self.first_name)
+        self.element_is_visible(self.locators.LAST_NAME).send_keys(self.last_name)
+        self.element_is_visible(self.locators.EMAIL).send_keys(self.email)
 
-        with allure.step('Fill mobile'):
-            self.element_is_visible(self.locators.MOBILE).send_keys(mobile)
+        locator_gender = {
+            'Male': self.locators.MALE_RADIOBTN,
+            'Female': self.locators.FEMALE_RADIOBTN,
+            'Other': self.locators.OTHER_RADIOBTN
+        }.get(self.gender)
+        self.element_is_visible(locator_gender).click()
 
-        with allure.step('Select date of birth'):
-            date = next(generated_date())
-            self.element_is_visible(self.locators.DATE_INPUT).click()
-            self.select_date_by_text(self.locators.DATE_SELECT_YEAR, date.year)
-            self.select_date_by_text(self.locators.DATE_SELECT_MONTH, date.month)
-            self.select_date_item_from_list(self.locators.DATE_SELECT_DAY_LIST, date.day)
-            student_data.date_of_birth = date
+        self.element_is_visible(self.locators.MOBILE).send_keys(self.mobile)
 
-        with allure.step('Select subjects'):
-            count_of_subjects = random.randint(0, 14)
-            if count_of_subjects > 0:
-                random.shuffle(subjects)
-                student_subjects = subjects[:count_of_subjects]
-                for subject in student_subjects:
-                    element = self.element_is_visible(self.locators.SUBJECTS)
-                    element.send_keys(subject)
-                    element.send_keys(Keys.RETURN)
-                student_data.subjects = student_subjects
-            else:
-                student_data.subjects = ['']
+        self.element_is_visible(self.locators.DATE_INPUT).click()
+        self.select_date_by_text(self.locators.DATE_SELECT_YEAR, self.date['year'])
+        self.select_date_by_text(self.locators.DATE_SELECT_MONTH, self.date['month'])
+        self.select_date_item_from_list(self.locators.DATE_SELECT_DAY_LIST, self.date['day'])
 
-        with allure.step('Select hobbies'):
-            count_of_hobbies = random.randint(0, 3)
-            if count_of_hobbies > 0:
-                hobbies = self.elements_are_visible(self.locators.HOBBIES_LIST)
-                random.shuffle(hobbies)
-                student_hobbies = hobbies[:count_of_hobbies]
-                for hobby in student_hobbies:
-                    hobby.click()
-                    time.sleep(1)
-                student_data.hobbies = [i.text for i in student_hobbies]
-            else:
-                student_data.hobbies = ['']
+        for subject in self.subjects:
+            element = self.element_is_visible(self.locators.SUBJECTS)
+            element.send_keys(subject)
+            element.send_keys(Keys.RETURN)
 
-        with allure.step('Upload file'):
-            upload_file = self.element_is_visible(self.locators.UPLOAD_FILE)
-            upload_file.send_keys(os.path.join(os.getcwd(), 'data', 'picture.jpg'))
-            student_data.upload_file = "picture.jpg"
+        hobbies_elements = self.elements_are_visible(self.locators.HOBBIES_LIST)
+        for hobby in hobbies_elements:
+            if hobby.text in self.hobbies:
+                hobby.click()
 
-        with allure.step('Fill current address'):
-            self.element_is_visible(self.locators.CUR_ADDRESS).send_keys(cur_address)
+        upload_file = self.element_is_visible(self.locators.UPLOAD_FILE)
+        upload_file.send_keys(os.path.join(os.getcwd(), 'data', self.upload_file))
 
-        state_and_city_list = [(k, v) for k, v in state_and_city.items()]
-        state_name, cities_list = random.choice(state_and_city_list)
-        city_name = random.choice(cities_list)
+        self.element_is_visible(self.locators.CUR_ADDRESS).send_keys(self.cur_address)
 
-        with allure.step('Select state'):
-            state = self.element_is_present(self.locators.STATE_LIST)
-            state.send_keys(state_name)
-            state.send_keys(Keys.RETURN)
-            student_data.state = state_name
+        state = self.element_is_present(self.locators.STATE_LIST)
+        state.send_keys(self.state)
+        state.send_keys(Keys.RETURN)
 
-        with allure.step('Select city'):
-            city = self.element_is_present(self.locators.CITY_LIST)
-            city.send_keys(city_name)
-            city.send_keys(Keys.RETURN)
-            student_data.city = city_name
+        city = self.element_is_present(self.locators.CITY_LIST)
+        city.send_keys(self.city)
+        city.send_keys(Keys.RETURN)
 
-        with allure.step('Click submit button'):
-            self.element_is_visible(self.locators.SUBMIT).click()
-
-        return student_data
+        self.element_is_visible(self.locators.SUBMIT).click()
 
     @allure.title('Get form result')
     def form_result(self):
@@ -118,4 +87,5 @@ class FormPage(BasePage):
         )
         result_list = self.elements_are_visible(self.locators.RESULT_TABLE)
         result_text = {k: v.text for k, v in zip(output_fields, result_list)}
+        print(result_text)
         return result_text

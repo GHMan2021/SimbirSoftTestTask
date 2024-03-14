@@ -13,7 +13,9 @@ class FormPageLocators:
     CUR_ADDRESS = (By.CSS_SELECTOR, "textarea[id='currentAddress']")
 
     # radiobutton fields
-    GENDER_RADIOBUTTON = (By.CSS_SELECTOR, f"[for='gender-radio-{randint(1, 3)}']")
+    MALE_RADIOBTN = (By.CSS_SELECTOR, f"[for='gender-radio-1']")
+    FEMALE_RADIOBTN = (By.CSS_SELECTOR, f"[for='gender-radio-2']")
+    OTHER_RADIOBTN = (By.CSS_SELECTOR, f"[for='gender-radio-3']")
 
     # date_picker field
     DATE_INPUT = (By.ID, "dateOfBirthInput")
