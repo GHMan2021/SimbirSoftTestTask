@@ -3,7 +3,6 @@ import random
 from faker import Faker
 
 fake = Faker()
-# Faker.seed()
 
 subjects_list = [
     "Hindi", "English", "Maths", "Physics", "Chemistry",

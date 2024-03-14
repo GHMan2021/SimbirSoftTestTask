@@ -1,3 +1,4 @@
+from generators.generator import StudentGenerator
 from pages.elements_page import FormPage
 import allure
 
@@ -9,32 +10,51 @@ class TestFormElements:
         with allure.step('Open browser'):
             form_page = FormPage(driver, 'https://demoqa.com/automation-practice-form')
             form_page.open()
+
+        form_page.remove_footer()
+
+        student_data = StudentGenerator.random()
         with allure.step('Fill all fields'):
-            form_page.fill_fields_and_submit()
+            form_page.enter_first_name(student_data['first_name'])
+            form_page.enter_last_name(student_data['last_name'])
+            form_page.enter_email(student_data['email'])
+            form_page.enter_gender(student_data['gender'])
+            form_page.enter_mobile(student_data['mobile'])
+            form_page.enter_date_of_birth(student_data['date_of_birth'])
+            form_page.enter_subjects(student_data['subjects'])
+            form_page.enter_hobbies(student_data['hobbies'])
+            form_page.enter_picture(student_data['upload_file'])
+            form_page.enter_cur_address(student_data['cur_address'])
+            form_page.enter_state(student_data['state'])
+            form_page.enter_city(student_data['city'])
+        form_page.enter_submit()
+
         with allure.step('Get result table data'):
-            result_table = form_page.form_result()
+            result_data = form_page.form_result()
 
         with allure.step('Check data form'):
             with allure.step('Check full name'):
-                assert (f"{form_page.first_name} {form_page.last_name}" == result_table['full_name']), \
+                assert (f"{student_data['first_name']} {student_data['last_name']}" == result_data['Student Name']), \
                     'full name does not matched'
             with allure.step('Check email'):
-                assert form_page.email == result_table['email'], 'email does not matched'
+                assert student_data['email'] == result_data['Student Email'], 'email does not matched'
             with allure.step('Check gender'):
-                assert form_page.gender == result_table['gender'], 'gender does not matched'
+                assert student_data['gender'] == result_data['Gender'], 'gender does not matched'
             with allure.step('Check mobile number'):
-                assert form_page.mobile == result_table['mobile'], 'mobile does not matched'
+                assert student_data['mobile'] == result_data['Mobile'], 'mobile does not matched'
             with allure.step('Check date of birth'):
-                assert (f"{form_page.date['day']} {form_page.date['month']},{form_page.date['year']}" ==
-                        result_table['date_of_birth']), 'date_of_birth does not matched'
+                date_dict = student_data['date_of_birth']
+                assert f"{date_dict['day']} {date_dict['month']},{date_dict['year']}" == result_data['Date of Birth'], \
+                    'date_of_birth does not matched'
             with allure.step('Check subjects'):
-                assert form_page.subjects == list(result_table['subjects'].split(", ")), 'subjects does not matched'
+                assert student_data['subjects'] == list(result_data['Subjects'].split(", ")), \
+                    'subjects does not matched'
             with allure.step('Check hobbies'):
-                assert form_page.hobbies == list(result_table['hobbies'].split(", ")), 'hobbies does not matched'
+                assert student_data['hobbies'] == list(result_data['Hobbies'].split(", ")), 'hobbies does not matched'
             with allure.step('Check upload file'):
-                assert form_page.upload_file == result_table['upload_file'], 'upload file does not matched'
+                assert student_data['upload_file'] == result_data['Picture'], 'upload file does not matched'
             with allure.step('Check address'):
-                assert form_page.cur_address == result_table['cur_address'], 'current address does not matched'
+                assert student_data['cur_address'] == result_data['Address'], 'current address does not matched'
             with allure.step('Check state and city'):
-                assert f"{form_page.state} {form_page.city}" == result_table['state_and_city'], \
+                assert f"{student_data['state']} {student_data['city']}" == result_data['State and City'], \
                     'state and city does not matched'

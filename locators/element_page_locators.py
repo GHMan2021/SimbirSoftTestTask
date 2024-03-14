@@ -37,4 +37,5 @@ class FormPageLocators:
     SUBMIT = (By.ID, "submit")
 
     # result data table
+    RESULT_TITLE_TABLE = (By.XPATH, "//div[@class='table-responsive']//td[1]")
     RESULT_TABLE = (By.XPATH, "//div[@class='table-responsive']//td[2]")
