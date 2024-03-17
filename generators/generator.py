@@ -22,24 +22,26 @@ state_and_city_dict = {
 
 class StudentGenerator:
     @staticmethod
-    def random():
-        first_name = fake.first_name()
-        last_name = fake.last_name()
-        email = fake.email()
-        gender = random.choice(["Male", "Female", "Other"])
-        mobile = fake.numerify("##########")
-        date_of_birth = DateGenerator.random()
+    def random() -> dict:
+        first_name: str = fake.first_name()
+        last_name: str = fake.last_name()
+        email: str = fake.email()
+        gender: str = random.choice(["Male", "Female", "Other"])
+        mobile: str = fake.numerify("##########")
+        date_of_birth: dict = DateGenerator.random()
 
         subjects_tmp = [i for i in subjects_list if random.choice([True, False])]
-        subjects = subjects_tmp if bool(subjects_tmp) else ['']
+        subjects: list = subjects_tmp if bool(subjects_tmp) else ['']
 
         hobbies_tmp = [i for i in hobbies_list if random.choice([True, False])]
-        hobbies = hobbies_tmp if bool(hobbies_tmp) else ['']
+        hobbies: list = hobbies_tmp if bool(hobbies_tmp) else ['']
 
-        upload_file = "picture.jpg"
-        cur_address = fake.street_address()
+        upload_file: str = "picture.jpg"
+        cur_address: str = fake.street_address()
 
-        state_and_city = random.choice([(k, v) for k, v in state_and_city_dict.items()])
+        state_and_city: tuple = random.choice([(k, v) for k, v in state_and_city_dict.items()])
+        state: str
+        city: str
         state, city = state_and_city[0], random.choice(state_and_city[1])
         return {
             "first_name": first_name,
@@ -59,10 +61,10 @@ class StudentGenerator:
 
 class DateGenerator:
     @staticmethod
-    def random():
-        year = fake.year()
-        month = fake.month_name()
-        day = fake.day_of_month()
+    def random() -> dict:
+        year: str = fake.year()
+        month: str = fake.month_name()
+        day: str = fake.day_of_month()
         return {
             "year": year,
             "month": month,

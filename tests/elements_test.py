@@ -1,3 +1,5 @@
+from selenium.webdriver.chrome.webdriver import WebDriver
+
 from generators.generator import StudentGenerator
 from pages.elements_page import FormPage
 import allure
@@ -23,7 +25,7 @@ import allure
     12. Check address
     13. Check state and city
 """)
-def test_form(driver):
+def test_form(driver: WebDriver) -> None:
     with allure.step('Open browser'):
         form_page = FormPage(driver, 'https://demoqa.com/automation-practice-form')
         form_page.open()
