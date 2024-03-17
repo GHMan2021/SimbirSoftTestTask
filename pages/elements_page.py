@@ -23,8 +23,8 @@ class FormPage(BasePage):
             'Male': self.locators.MALE_RADIOBTN,
             'Female': self.locators.FEMALE_RADIOBTN,
             'Other': self.locators.OTHER_RADIOBTN
-        }.get(gender)
-        self.element_is_visible(locator_gender).click()
+        }
+        self.element_is_visible(locator_gender[gender]).click()
 
     def enter_mobile(self, mobile: str) -> None:
         self.element_is_visible(self.locators.MOBILE).send_keys(mobile)
