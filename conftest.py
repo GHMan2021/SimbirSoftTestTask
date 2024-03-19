@@ -8,6 +8,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 @pytest.fixture(scope='function')
 def driver() -> WebDriver:
+    """Фикстура для создания экземпляра веб-драйвера Chrome.
+
+    Returns:
+        WebDriver: Экземпляр веб-драйвера для управления браузером Chrome.
+    """
     chrome_options = webdriver.ChromeOptions()
     service = Service(executable_path=ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)

@@ -2,6 +2,10 @@ from selenium.webdriver.common.by import By
 
 
 class FormPageLocators:
+    """Класс FormPageLocators содержит локаторы на элементы тестируемой
+    веб формы на странице.
+    """
+
     # text form fields
     FIRST_NAME = (By.XPATH, "//input[@id='firstName']")  # xpath
     LAST_NAME = (By.ID, "lastName")  # id

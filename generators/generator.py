@@ -1,3 +1,4 @@
+import datetime
 import random
 
 from faker import Faker
@@ -21,6 +22,21 @@ state_and_city_dict = {
 
 
 class StudentGenerator:
+    """Класс StudentGenerator используется для генерации данных о студенте
+
+    Применение: формирует данные для проведения тестов
+
+    Note:
+        Данные о gender, subjects, hobbies, state, city взяты с сайта,
+        объекта тестирования.
+
+    Methods:
+    --------
+    random()
+        Генерирует случайные данные из библиотеки Faker и выборочные с сайта.
+        Результат возвращает в виде словаря.
+    """
+
     @staticmethod
     def random() -> dict:
         first_name: str = fake.first_name()
@@ -60,11 +76,24 @@ class StudentGenerator:
 
 
 class DateGenerator:
+    """Класс DateGenerator используется для генерации случайной даты.
+
+    Применение: используется в классе StudentGenerator для поля
+    дата рождения студента возрастом от 16 до 70 лет.
+
+    Methods
+    -------
+    random()
+        Из библиотеки Faker генерирует год, день числами и название месяца.
+        Возвращает результат в виде словаря.
+    """
+
     @staticmethod
     def random() -> dict:
-        year: str = fake.year()
-        month: str = fake.month_name()
-        day: str = fake.day_of_month()
+        date: datetime.date = fake.date_of_birth(minimum_age=16, maximum_age=70)
+        year: str = str(date.year)
+        month: str = date.strftime("%B")
+        day: str = str(date.day)
         return {
             "year": year,
             "month": month,

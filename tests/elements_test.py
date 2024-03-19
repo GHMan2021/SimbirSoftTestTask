@@ -26,6 +26,11 @@ import allure
     13. Check state and city
 """)
 def test_form(driver: WebDriver) -> None:
+    """Тестирование заполнения формы.
+
+    Args:
+        driver (WebDriver): Экземпляр WebDriver для управления браузером.
+    """
     with allure.step('Open browser'):
         form_page = FormPage(driver, 'https://demoqa.com/automation-practice-form')
         form_page.open()
@@ -33,6 +38,7 @@ def test_form(driver: WebDriver) -> None:
     form_page.remove_footer()
 
     student_data = StudentGenerator.random()
+    # Заполнение полей формы тестовыми данными
     with allure.step('Fill all fields'):
         form_page.enter_first_name(student_data['first_name'])
         form_page.enter_last_name(student_data['last_name'])
@@ -48,9 +54,11 @@ def test_form(driver: WebDriver) -> None:
         form_page.enter_city(student_data['city'])
     form_page.enter_submit()
 
+    # Получение результата заполнения формы
     with allure.step('Get result table data'):
         result_data = form_page.form_result()
 
+    # Проверка результатов заполнения формы
     with allure.step('Check full name'):
         assert (f"{student_data['first_name']} {student_data['last_name']}" == result_data['Student Name']), \
             'full name does not matched'
