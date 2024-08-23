@@ -70,7 +70,9 @@ def test_form(driver: WebDriver) -> None:
         assert student_data['mobile'] == result_data['Mobile'], 'mobile does not matched'
     with allure.step('Check date of birth'):
         date_dict = student_data['date_of_birth']
-        assert f"{date_dict['day']} {date_dict['month']},{date_dict['year']}" == result_data['Date of Birth'], \
+        date_of_birth = result_data['Date of Birth']
+        date_of_birth = date_of_birth[1:] if date_of_birth.startswith('0') else date_of_birth
+        assert f"{date_dict['day']} {date_dict['month']},{date_dict['year']}" == date_of_birth, \
             'date of birth does not matched'
     with allure.step('Check subjects'):
         assert student_data['subjects'] == list(result_data['Subjects'].split(", ")), 'subjects does not matched'
